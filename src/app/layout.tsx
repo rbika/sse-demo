@@ -4,8 +4,8 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 
 import { Header } from '@/components/header'
-import { QueryClientProvider } from '@/components/query-client-provider'
 import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from '@/components/ui/toast'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Nextjs Starter',
-  description: 'Nextjs Starter Project',
+  title: 'SSE Demo',
+  description: 'Watch a Pipeline Run over Server-Sent Events',
 }
 
 const RootLayout = ({
@@ -36,12 +36,12 @@ const RootLayout = ({
           attribute="class"
           defaultTheme="system"
           enableSystem
+          enableColorScheme={false}
           disableTransitionOnChange
         >
-          <QueryClientProvider>
-            <Header />
-            <main className="my-12 pt-px font-sans">{children}</main>
-          </QueryClientProvider>
+          <Header />
+          <main className="my-12 pt-px font-sans">{children}</main>
+          <Toaster limit={1} />
         </ThemeProvider>
       </body>
     </html>
