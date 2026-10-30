@@ -10,7 +10,8 @@ const PIPELINE = [
   'Deploying',
 ] as const
 
-// Idle Snapshot: no Run yet or after a dropped connection. Every Step is pending.
+// Idle Snapshot: no Run yet or after a dropped connection. Every Step is
+// pending.
 const IDLE_SNAPSHOT: Snapshot = PIPELINE.map((name) => ({
   name,
   status: 'pending',

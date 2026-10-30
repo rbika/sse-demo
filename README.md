@@ -2,6 +2,8 @@
 
 This is a companion demo for the [Working with Server-Sent Events](https://rbika.com/blog/working-with-server-sent-events) blog post.
 
+Check the [live demo](https://sse-demo-rbika.vercel.app/).
+
 ## How to use
 
 Pick a Strategy if you want Fetch instead of EventSource, then click **Simulate success** or **Simulate error**. Those start a Run with Outcome success (every Step completes) or error (Testing fails; later Steps are skipped). Switching Strategy remounts the other consumer at Idle.

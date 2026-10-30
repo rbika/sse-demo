@@ -27,7 +27,7 @@ const SseEventSource = ({
   const eventSourceRef = useRef<EventSource | null>(null)
 
   // Event listeners close over the render that created them, so
-  // `inProgress`state would be stale inside onerror. The ref is the
+  // `inProgress` state would be stale inside onerror. The ref is the
   // live "a current Run" flag those listeners can read.
   const inProgressRef = useRef(false)
 
@@ -93,9 +93,9 @@ const SseEventSource = ({
       const droppedMidRun = inProgressRef.current
       stopRun()
 
-      // onerror fires for real network drops *and* after we close() a
-      // Terminal Run. Use the ref to tell those apart: if we already
-      // marked the Run Terminal, ignore this.
+      // onerror fires for real network drops *and* when the server closes
+      // the stream after a Terminal Snapshot. Use the ref to tell those
+      // apart: if we already marked the Run Terminal, ignore this.
       if (!droppedMidRun) {
         return
       }

@@ -14,15 +14,15 @@ type SseEvent = { event: string; data: string }
 // Rebuild the SSE text so EventStream can show what actually arrived.
 const toEventStreamText = (data: string) => `event: run\ndata: ${data}`
 
-// Parses complete SSE events out of a raw fetch buffer. Network chunks
+// Minimal parser for the article's server, not a general SSE parser.
+// That server writes `event: run\ndata: <json>\n\n`. Network chunks
 // don't line up with events, so leftover text comes back as `rest`.
 const consumeSseEvents = (
   buffer: string,
 ): { events: SseEvent[]; rest: string } => {
   // Fetch gives you a raw byte stream — unlike EventSource, it does not
-  // parse SSE for you. Network chunks do not line up with events: one
-  // chunk can hold several events, or a single event can be split across
-  // two chunks. Split on `\n\n`.
+  // parse SSE for you. One chunk can hold several of those events, or a
+  // single event can be split across two chunks. Split on `\n\n`.
   const chunks = buffer.split('\n\n')
 
   // Trailing fragment to prepend onto the next chunk.
@@ -35,6 +35,7 @@ const consumeSseEvents = (
     let event = 'message'
     const data: string[] = []
 
+    // Only `event:` and `data:` — that's all this server sends.
     for (const line of chunk.split('\n')) {
       if (line.startsWith('event:')) {
         event = line.slice(6).trimStart()
@@ -71,7 +72,7 @@ const SseFetch = ({
   const abortControllerRef = useRef<AbortController | null>(null)
 
   // Event listeners close over the render that created them, so
-  // `inProgress`state would be stale inside onerror. The ref is the
+  // `inProgress` state would be stale inside onerror. The ref is the
   // live "a current Run" flag those listeners can read.
   const inProgressRef = useRef(false)
 
@@ -134,7 +135,7 @@ const SseFetch = ({
         // getReader() unlocks the body as chunks of bytes.
         const reader = response.body.getReader()
 
-        //TextDecoder turns those bytes into a string.
+        // TextDecoder turns those bytes into a string.
         const decoder = new TextDecoder()
 
         let buffer = ''
@@ -217,7 +218,10 @@ const SseFetch = ({
         }
 
         setSteps(IDLE_SNAPSHOT)
-        toast.add({ type: 'error', title: 'Connection lost' })
+        toast.add({
+          type: 'error',
+          title: 'Connection lost. Please try again.',
+        })
       }
     })()
   }

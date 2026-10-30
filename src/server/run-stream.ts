@@ -74,8 +74,8 @@ export function runStream(
         outcome === 'error' ? FAIL_STEP_INDEX : PIPELINE.length - 1
 
       // Send the first Snapshot of the Run, then a Snapshot after each
-      // Step transition. The last loop iteration still has a running
-      // Step. The Terminal Snapshot is sent after the loop.
+      // Step transition. The last loop iteration still has a running Step.
+      // The Terminal Snapshot is sent after the loop.
       for (
         let completedCount = 0;
         completedCount <= lastRunningIndex;
